@@ -1,7 +1,6 @@
 import numpy as np
 import random
 
-
 def evolutionary_classic(q, p0, u, sigma, pc, t_max, limit):
     """
     Perform the evolutionary algorithm to optimize a given function.

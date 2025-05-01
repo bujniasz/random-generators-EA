@@ -1,14 +1,14 @@
 import numpy as np
 from cec2017.functions import f2, f13
 import cec2017
-from evo import evolutionary_classic
+from evolutionary_alg import evolutionary_classic
 from rng_factory import RNG
 
 if __name__ == "__main__":
     MAX_X = 100  # Boundary limit for the solution
     DIMENSIONALITY = 10
 
-    RUNS = 500   # Number of runs for the optimization algorithm
+    RUNS = 5   # Number of runs for the optimization algorithm
     SIGMA = 1    # Mutation strength
     U = 10       # Population size
     FES = 50000  # Number of objective function evaluations
