@@ -8,6 +8,8 @@ class RNG:
         self.dim = dim
         self.seed = seed
         self.rng = self._create_rng()
+        self._qrng_buffer = np.array([])
+        self._qrng_index = 0
 
 
     def _create_rng(self):
@@ -23,6 +25,13 @@ class RNG:
         else:
             raise ValueError(f"Unknown generator: {self.name}")
 
+    def _next_qrng_value(self):
+        if self._qrng_index >= len(self._qrng_buffer):
+            self._qrng_buffer = self.rng.random(1)[0]
+            self._qrng_index = 0
+        val = self._qrng_buffer[self._qrng_index]
+        self._qrng_index += 1
+        return val
 
     def uniform(self, low, high, size):
         if self.name == "random":
@@ -46,7 +55,8 @@ class RNG:
             idx = self.rng.integers(0, len(array))
             return array[idx]
         else:
-            idx = int(self.rng.random(1)[0, 0] * len(array))
+            val = self._next_qrng_value()
+            idx = int(val * len(array))
             return array[min(idx, len(array) - 1)]
 
 
@@ -56,7 +66,7 @@ class RNG:
         elif self.name == "numpy":
             return self.rng.random()
         else:
-            return self.rng.random(1)[0, 0]
+            return self._next_qrng_value()
         
 
     def randrange(self, start, stop=None):
@@ -70,5 +80,5 @@ class RNG:
         elif self.name == "numpy":
             return self.rng.integers(start, stop)
         else:
-            val = self.rng.random(1)[0, 0]
-            return start + int(val * width)
+            val = self._next_qrng_value()
+            return start + int(val * (stop - start))
