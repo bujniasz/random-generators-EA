@@ -1,7 +1,7 @@
 import numpy as np
 import random
 
-def evolutionary_classic(q, p0, u, sigma, pc, t_max, limit):
+def evolutionary_classic(q, p0, u, delta_small, delta_big, p_big_jump, pc, t_max, limit, rng):
     """
     Perform the evolutionary algorithm to optimize a given function.
 
@@ -27,9 +27,9 @@ def evolutionary_classic(q, p0, u, sigma, pc, t_max, limit):
     best_grade, best_x = find_best(o)
 
     while t <= t_max:
-        r = reproduce(o, u)
-        c = crossover(r, pc)
-        m = mutate(c, sigma, limit)
+        r = reproduce(o, u, rng)
+        c = crossover(r, pc, rng)
+        m = mutate(c, delta_small, delta_big, p_big_jump, limit, rng)
         om = grade(q, m)
         curr_best_grade, curr_best_x = find_best(om)
 
@@ -79,7 +79,7 @@ def find_best(graded_population):
     return best_grade, best_x
 
 
-def reproduce(graded_population, population_count):
+def reproduce(graded_population, population_count, rng):
     """
     Tournament selection. Reproduces a new population from the graded population.
 
@@ -93,8 +93,8 @@ def reproduce(graded_population, population_count):
     new_population = []
 
     for _ in range(population_count):
-        grade1, x1 = random.choice(graded_population)
-        grade2, x2 = random.choice(graded_population)
+        grade1, x1 = rng.choice(graded_population)
+        grade2, x2 = rng.choice(graded_population)
 
         if grade1 > grade2:
             new_population.append(x2)
@@ -104,13 +104,15 @@ def reproduce(graded_population, population_count):
     return new_population
 
 
-def mutate(population, sigma, limit):
+def mutate(population, delta_small, delta_big, p_big_jump, limit, rng):
     """
     Applies Gaussian mutation to the population.
 
     Parameters:
         population (list): The population to mutate.
-        sigma (float): Standard deviation for Gaussian noise.
+        p_big_jump (float): Probability of mutating far in the space.
+        delta_big (int or float): Coeffcient of far mutation.
+        delta_small (int or float): Coefficient of standard mutation.
         limit (int or float): The boundary limit for mutation.
 
     Returns:
@@ -119,30 +121,33 @@ def mutate(population, sigma, limit):
     mutated_population = []
 
     for x in population:
-        mutated_x = x + sigma * np.random.normal(0, 1, len(x))
+        if rng.rand() < p_big_jump:
+            delta = delta_big
+        else:
+            delta = delta_small
 
-        for i in range(len(mutated_x)):
-            if mutated_x[i] > limit:
-                mutated_x[i] = limit
-            elif mutated_x[i] < -limit:
-                mutated_x[i] = -limit
-
+        perturb = rng.uniform(-delta, delta, 1).reshape(-1)
+        mutated_x = np.clip(x + perturb, -limit, limit)
         mutated_population.append(mutated_x)
 
     return mutated_population
 
-def crossover(population, pc):
+
+def crossover(population, pc, rng):
     crossed_population = []
+
     for x in population:
-        if random.random() <= pc and len(x) > 2:
+        if rng.rand() <= pc and len(x) > 2:
             candidates = [ind for ind in population if not np.array_equal(ind, x)]
             if not candidates:
                 crossed_population.append(x)
                 continue
-            partner = random.choice(candidates)
-            split = random.randrange(1, len(x) - 1)
+
+            partner = rng.choice(candidates)
+            split = rng.randrange(1, len(x) - 1)
             child = np.concatenate((x[:split], partner[split:]))
             crossed_population.append(child)
         else:
             crossed_population.append(x)
+
     return crossed_population
