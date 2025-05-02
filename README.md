@@ -14,4 +14,4 @@ This project investigates the impact of different random number generators (RNGs
     * `main.py` - entry point of the project: initializes the experiment, runs the algorithm, and collects results.
     * `evolutionary_alg.py` - implements the core evolutionary algorithm, including selection, crossover, and mutation.
     * `rng_factory.py` - provides a unified wrapper for multiple random number generators (pseudo and quasi-random).
-    * `evolutionary_alg.py` - performs statistical analysis and visualizes performance differences between RNGs.
+    * `stats_analyzis.py` - performs statistical analysis and visualizes performance differences between RNGs.
