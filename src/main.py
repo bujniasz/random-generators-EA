@@ -7,9 +7,9 @@ if __name__ == "__main__":
     MAX_X = 100  # Boundary limit for the solution
     DIMENSIONALITY = 10
 
-    RUNS = 5        # Number of runs for the optimization algorithm
+    RUNS = 3        # Number of runs for the optimization algorithm
     U = 10          # Population size
-    FES = 50000     # Number of objective function evaluations
+    FES = 50000     # Number of objective function evaluationsW
     PC = 0.5
     DELTA_S = 0.1
     DELTA_B = 10
@@ -19,11 +19,12 @@ if __name__ == "__main__":
 
     for i in range(RUNS):
         p0 = []
-        #rng = RNG("random", DIMENSIONALITY, seed=i)  #Mersenne Twister
+        rng = RNG("random", DIMENSIONALITY, seed=i)  #Mersenne Twister
         #rng = RNG("numpy", DIMENSIONALITY, seed=i)  #PCG
+        #rng = RNG("xoshiro", DIMENSIONALITY, seed=i)  #xoshiro256
         #rng = RNG("sobol", DIMENSIONALITY, seed=i)  #Sobol   
-        rng = RNG("halton", DIMENSIONALITY, seed=i) #Halton
-
+        #rng = RNG("halton", DIMENSIONALITY, seed=i) #Halton
+        #rng = RNG("lattice", DIMENSIONALITY, seed=i)  #Lattice
 
 
         for j in range(U):
@@ -31,7 +32,7 @@ if __name__ == "__main__":
             p0.append(x)
 
         t_max = FES / U  # Maximum number of generations (iterations)
-        o, x = evolutionary_classic(f13, p0, U, DELTA_S, DELTA_B, P_BIG_JUMP, PC, t_max, MAX_X, rng)
+        o, x = evolutionary_classic(f2, p0, U, DELTA_S, DELTA_B, P_BIG_JUMP, PC, t_max, MAX_X, rng)
         res.append(o)
 
     print(

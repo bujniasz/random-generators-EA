@@ -1,5 +1,4 @@
 import numpy as np
-import random
 
 def evolutionary_classic(q, p0, u, delta_small, delta_big, p_big_jump, pc, t_max, limit, rng):
     """
@@ -13,7 +12,9 @@ def evolutionary_classic(q, p0, u, delta_small, delta_big, p_big_jump, pc, t_max
         q (callable): Objective function to be minimized.
         p0 (list): Initial population, where each individual is a solution.
         u (int): Number of individuals in a population.
-        sigma (float): Mutation strength.
+        p_big_jump (float): Probability of mutating far in the space.
+        delta_big (int or float): Coeffcient of far mutation.
+        delta_small (int or float): Coefficient of standard mutation.
         pc: Probability of crossover.
         t_max (int or float): Maximum number of generations (iterations).
         limit (int or float): Boundary limit for the solution.

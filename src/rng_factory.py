@@ -1,9 +1,11 @@
 from scipy.stats import qmc
 import numpy as np
 import random
+from randomgen import Xoshiro256
+from qmcpy import Lattice
 
 class RNG:
-    def __init__(self, name, dim, seed=None):
+    def __init__(self, name, dim, seed):
         self.name = name
         self.dim = dim
         self.seed = seed
@@ -17,8 +19,12 @@ class RNG:
             random.seed(self.seed)
             return random
         elif self.name == "numpy":
-            return np.random.default_rng(self.seed)
-        if self.name == "sobol":
+            return np.random.default_rng(seed=self.seed)
+        elif self.name == "xoshiro":
+            return np.random.Generator(Xoshiro256(seed=self.seed))
+        elif self.name == "lattice":
+            return Lattice(dimension=self.dim, seed=self.seed)
+        elif self.name == "sobol":
             return qmc.Sobol(d=self.dim, scramble=True, seed=self.seed)
         elif self.name == "halton":
             return qmc.Halton(d=self.dim, seed=self.seed)
@@ -27,7 +33,12 @@ class RNG:
 
     def _next_qrng_value(self):
         if self._qrng_index >= len(self._qrng_buffer):
-            self._qrng_buffer = self.rng.random(1)[0]
+            if self.name in ["sobol", "halton"]:
+                self._qrng_buffer = self.rng.random(1)[0]
+            elif self.name == "lattice":
+                self._qrng_buffer = self.rng.gen_samples(1)[0]
+            else:
+                raise RuntimeError("QRNG buffer called on non-QRNG generator.")
             self._qrng_index = 0
         val = self._qrng_buffer[self._qrng_index]
         self._qrng_index += 1
@@ -41,8 +52,11 @@ class RNG:
                 [self.rng.uniform(low, high) for _ in range(self.dim)]
                 for _ in range(size)
             ])
-        elif self.name == "numpy":
+        elif self.name in ["numpy", "xoshiro"]:
             return self.rng.uniform(low, high, size=(size, self.dim))
+        elif self.name == "lattice":
+            samples = self.rng.gen_samples(size)
+            return low + (high - low) * samples
         else:
             samples = self.rng.random(size)
             return qmc.scale(samples, low, high)
@@ -51,9 +65,13 @@ class RNG:
     def choice(self, array):
         if self.name == "random":
             return self.rng.choice(array)
-        elif self.name == "numpy":
+        elif self.name in ["numpy", "xoshiro"]:
             idx = self.rng.integers(0, len(array))
             return array[idx]
+        elif self.name == "lattice":
+            val = self._next_qrng_value()
+            idx = int(val * len(array))
+            return array[min(idx, len(array) - 1)]
         else:
             val = self._next_qrng_value()
             idx = int(val * len(array))
@@ -63,8 +81,10 @@ class RNG:
     def rand(self):
         if self.name == "random":
             return self.rng.random()
-        elif self.name == "numpy":
+        elif self.name in ["numpy", "xoshiro"]:
             return self.rng.random()
+        elif self.name == "lattice":
+            return self._next_qrng_value()
         else:
             return self._next_qrng_value()
         
@@ -73,12 +93,14 @@ class RNG:
         if stop is None:
             stop = start
             start = 0
-        width = stop - start
 
         if self.name == "random":
             return self.rng.randrange(start, stop)
-        elif self.name == "numpy":
+        elif self.name in ["numpy", "xoshiro"]:
             return self.rng.integers(start, stop)
+        elif self.name == "lattice":
+            val = self._next_qrng_value()
+            return start + int(val * (stop - start))
         else:
             val = self._next_qrng_value()
             return start + int(val * (stop - start))
