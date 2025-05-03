@@ -2,6 +2,8 @@ import numpy as np
 from cec2017.functions import f2, f13
 from evolutionary_alg import evolutionary_classic
 from rng_factory import RNG
+import time
+import secrets
 
 if __name__ == "__main__":
     MAX_X = 100  # Boundary limit for the solution
@@ -19,12 +21,15 @@ if __name__ == "__main__":
 
     for i in range(RUNS):
         p0 = []
-        rng = RNG("random", DIMENSIONALITY, seed=i)  #Mersenne Twister
-        #rng = RNG("numpy", DIMENSIONALITY, seed=i)  #PCG
-        #rng = RNG("xoshiro", DIMENSIONALITY, seed=i)  #xoshiro256
-        #rng = RNG("sobol", DIMENSIONALITY, seed=i)  #Sobol   
-        #rng = RNG("halton", DIMENSIONALITY, seed=i) #Halton
-        #rng = RNG("lattice", DIMENSIONALITY, seed=i)  #Lattice
+        #seed = int(time.time() * 1e6) % 2**32
+        seed = secrets.randbits(32)
+        print(seed)
+        rng = RNG("random", DIMENSIONALITY, seed=seed)      #Mersenne Twister
+        #rng = RNG("numpy", DIMENSIONALITY, seed=seed)      #PCG
+        #rng = RNG("xoshiro", DIMENSIONALITY, seed=seed)    #xoshiro256
+        #rng = RNG("sobol", DIMENSIONALITY, seed=seed)      #Sobol   
+        #rng = RNG("halton", DIMENSIONALITY, seed=seed)     #Halton
+        #rng = RNG("lattice", DIMENSIONALITY, seed=seed)    #Lattice
 
 
         for j in range(U):
