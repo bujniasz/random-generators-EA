@@ -68,10 +68,6 @@ class RNG:
         elif self.name in ["numpy", "xoshiro"]:
             idx = self.rng.integers(0, len(array))
             return array[idx]
-        elif self.name == "lattice":
-            val = self._next_qrng_value()
-            idx = int(val * len(array))
-            return array[min(idx, len(array) - 1)]
         else:
             val = self._next_qrng_value()
             idx = int(val * len(array))
@@ -83,8 +79,6 @@ class RNG:
             return self.rng.random()
         elif self.name in ["numpy", "xoshiro"]:
             return self.rng.random()
-        elif self.name == "lattice":
-            return self._next_qrng_value()
         else:
             return self._next_qrng_value()
         
@@ -98,9 +92,6 @@ class RNG:
             return self.rng.randrange(start, stop)
         elif self.name in ["numpy", "xoshiro"]:
             return self.rng.integers(start, stop)
-        elif self.name == "lattice":
-            val = self._next_qrng_value()
-            return start + int(val * (stop - start))
         else:
             val = self._next_qrng_value()
             return start + int(val * (stop - start))
