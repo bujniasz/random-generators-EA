@@ -3,20 +3,20 @@ import numpy as np
 import subprocess
 from src.rng_factory import RNG
 
-@pytest.mark.parametrize("generator_name", ["random", "numpy", "xoshiro", "sobol", "halton", "lattice"])
+@pytest.mark.parametrize("generator_name", ["random", "numpy", "xoshiro", "sobol", "halton"])
 def test_uniform_value_range(generator_name):
     rng = RNG(generator_name, dim=5, seed=42)
     result = rng.uniform(-10, 10, 1).reshape(-1)
     assert np.all(result >= -10)
     assert np.all(result < 10)
 
-@pytest.mark.parametrize("generator_name", ["random", "numpy", "xoshiro", "sobol", "halton", "lattice"])
+@pytest.mark.parametrize("generator_name", ["random", "numpy", "xoshiro", "sobol", "halton"])
 def test_uniform_output_shape(generator_name):
     rng = RNG(generator_name, dim=5, seed=42)
     result = rng.uniform(-10, 10, 1).reshape(-1)
     assert result.shape == (5,)
 
-@pytest.mark.parametrize("generator_name", ["random", "numpy", "xoshiro", "sobol", "halton", "lattice"])
+@pytest.mark.parametrize("generator_name", ["random", "numpy", "xoshiro", "sobol", "halton"])
 def test_uniform_reproducibility(generator_name):
     code = f"""
 from src.rng_factory import RNG

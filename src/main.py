@@ -20,13 +20,13 @@ if __name__ == "__main__":
     RUNS = 30
     U = 50
     PC = 0.5
-    DELTA_S = 0.05
-    DELTA_B = 5
+    DELTA_S = 0.1
+    DELTA_B = 10
     P_BIG_JUMP = 0.02
 
     FES_SETTINGS = {
-        "short_budget": 1000,
-        "long_budget": 10000
+        "short_budget": 1000
+        #"long_budget": 20000
     }
 
     FUNCTIONS = {
@@ -43,8 +43,7 @@ if __name__ == "__main__":
         "numpy",    # PCG
         "xoshiro",  # xoshi#ro256
         "sobol",    # Sobol
-        "halton",   # Halton
-        "lattice"   # Lattice
+        "halton"   # Halton
     ]
 
     results = []
