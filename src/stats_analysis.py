@@ -4,15 +4,13 @@ import scikit_posthocs as sp
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
-from matplotlib.ticker import LogLocator
-
 
 # Wczytanie danych
 df = pd.read_csv("results_data/main_results.csv")
 df["score"] = df["score"].astype(float)
 df["run_time"] = df["run_time"].astype(float)
 
-GENERATOR_ORDER = ["random", "numpy", "xoshiro", "sobol", "halton", "lattice"]  
+GENERATOR_ORDER = ["random", "numpy", "xoshiro", "sobol", "halton"]
 
 for fes_type in df["fes_type"].unique():
     for func in df["function"].unique():
@@ -79,20 +77,6 @@ for fes_type in df["fes_type"].unique():
         plt.savefig(os.path.join(plot_dir, "boxplot.png"))
         plt.close()
 
-        # Boxplot bez lattice
-        filtered = sub[sub["generator"] != "lattice"]
-        plt.figure(figsize=(12, 6))
-        sns.boxplot(x="generator", y="score", data=filtered, hue="generator", dodge=False, showfliers=True)
-        sns.stripplot(x="generator", y="score", data=filtered, color="black", alpha=0.5, jitter=True, dodge=False)
-        plt.title(f"Rozkład wyników – {func} ({fes_type}) bez lattice")
-        plt.xlabel("Generator")
-        plt.ylabel("Najlepszy wynik")
-        plt.yscale("log")
-        plt.gca().yaxis.set_major_locator(LogLocator(base=10.0, subs=(1.0, 2.0, 5.0), numticks=12))
-        plt.tight_layout()
-        plt.savefig(os.path.join(plot_dir, "boxplot_nolattice.png"))
-        plt.close()
-
         # Scatterplot pełny
         plt.figure(figsize=(10, 6))
         sns.scatterplot(data=sub, x="run_time", y="score", hue="generator", style="generator", s=100)
@@ -102,15 +86,4 @@ for fes_type in df["fes_type"].unique():
         plt.yscale("log")
         plt.tight_layout()
         plt.savefig(os.path.join(plot_dir, "time_vs_score.png"))
-        plt.close()
-
-        # Scatterplot bez lattice
-        plt.figure(figsize=(10, 6))
-        sns.scatterplot(data=filtered, x="run_time", y="score", hue="generator", style="generator", s=100)
-        plt.title(f"Czas działania vs wynik – {func} ({fes_type}) bez lattice")
-        plt.xlabel("Czas działania (s)")
-        plt.ylabel("Najlepszy wynik")
-        plt.yscale("log")
-        plt.tight_layout()
-        plt.savefig(os.path.join(plot_dir, "time_vs_score_nolattice.png"))
         plt.close()

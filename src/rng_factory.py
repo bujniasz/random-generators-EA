@@ -22,8 +22,6 @@ class RNG:
             return np.random.default_rng(seed=self.seed)
         elif self.name == "xoshiro":
             return np.random.Generator(Xoshiro256(seed=self.seed))
-        elif self.name == "lattice":
-            return Lattice(dimension=self.dim, seed=self.seed)
         elif self.name == "sobol":
             return qmc.Sobol(d=self.dim, scramble=True, seed=self.seed)
         elif self.name == "halton":
@@ -35,8 +33,6 @@ class RNG:
         if self._qrng_index >= len(self._qrng_buffer):
             if self.name in ["sobol", "halton"]:
                 self._qrng_buffer = self.rng.random(1)[0]
-            elif self.name == "lattice":
-                self._qrng_buffer = self.rng.gen_samples(1)[0]
             else:
                 raise RuntimeError("QRNG buffer called on non-QRNG generator.")
             self._qrng_index = 0
@@ -54,9 +50,6 @@ class RNG:
             ])
         elif self.name in ["numpy", "xoshiro"]:
             return self.rng.uniform(low, high, size=(size, self.dim))
-        elif self.name == "lattice":
-            samples = self.rng.gen_samples(size)
-            return low + (high - low) * samples
         else:
             samples = self.rng.random(size)
             return qmc.scale(samples, low, high)
