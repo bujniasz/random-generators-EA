@@ -1,5 +1,5 @@
 import numpy as np
-from cec2017.functions import f2, f3, f8, f13, f15
+from cec2017.functions import f2, f3, f4, f6, f8, f10, f11, f12, f13, f14, f15, f19
 from evolutionary_alg import evolutionary_classic
 from rng_factory import RNG
 import time
@@ -16,25 +16,26 @@ for folder in ["plots", "results_data"]:
 
 if __name__ == "__main__":
     MAX_X = 100
-    DIMENSIONALITY = 10
-    RUNS = 50
-    U = 20
+    DIMENSIONALITY = 30
+    RUNS = 30
+    U = 50
     PC = 0.5
-    DELTA_S = 0.1
-    DELTA_B = 10
-    P_BIG_JUMP = 0.05
+    DELTA_S = 0.05
+    DELTA_B = 5
+    P_BIG_JUMP = 0.02
 
     FES_SETTINGS = {
         "short_budget": 1000,
-        "long_budget": 75000
+        "long_budget": 10000
     }
 
     FUNCTIONS = {
-        "f2": f2,
-        "f3": f3,
-        "f8": f8,
-        "f13": f13,
-        "f15": f15
+        "f4": f4,
+        # "f6": f6,
+        # "f11": f11,
+        # "f12": f12,
+        # "f14": f14,
+        "f19": f19
     }
 
     GENERATORS = [
@@ -56,7 +57,6 @@ if __name__ == "__main__":
                     seed = secrets.randbits(32)
                     rng = RNG(gen_name, DIMENSIONALITY, seed=seed)
 
-                    # Population initialization
                     p0 = [
                         np.array(rng.uniform(-MAX_X, MAX_X, 1)).reshape(-1)
                         for _ in range(U)
