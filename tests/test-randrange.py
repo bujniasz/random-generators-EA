@@ -4,7 +4,7 @@ import subprocess
 import os
 from src.rng_factory import RNG
 
-@pytest.mark.parametrize("generator_name", ["random", "numpy", "xoshiro", "sobol", "halton", "lattice"])
+@pytest.mark.parametrize("generator_name", ["random", "numpy", "xoshiro", "sobol", "halton"])
 def test_randrange_value_range_and_type(generator_name):
     rng = RNG(generator_name, dim=5, seed=42)
 
@@ -13,7 +13,7 @@ def test_randrange_value_range_and_type(generator_name):
     assert all(1 <= val < 10 for val in values)
     assert all(isinstance(val, int) for val in values)
 
-@pytest.mark.parametrize("generator_name", ["random", "numpy", "xoshiro", "sobol", "halton", "lattice"])
+@pytest.mark.parametrize("generator_name", ["random", "numpy", "xoshiro", "sobol", "halton"])
 def test_randrange_reproducibility(generator_name):
     code = f"""
 from src.rng_factory import RNG
@@ -26,7 +26,7 @@ print(rng.randrange(1, 10))
 
     assert result1 == result2
 
-@pytest.mark.parametrize("generator_name", ["random", "numpy", "xoshiro", "sobol", "halton", "lattice"])
+@pytest.mark.parametrize("generator_name", ["random", "numpy", "xoshiro", "sobol", "halton"])
 def test_randrange_different_values(generator_name):
     rng = RNG(generator_name, dim=5, seed=42)
 

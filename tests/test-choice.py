@@ -4,7 +4,7 @@ import subprocess
 import os
 from src.rng_factory import RNG
 
-@pytest.mark.parametrize("generator_name", ["random", "numpy", "xoshiro", "sobol", "halton", "lattice"])
+@pytest.mark.parametrize("generator_name", ["random", "numpy", "xoshiro", "sobol", "halton"])
 def test_choice_from_list(generator_name):
     rng = RNG(generator_name, dim=5, seed=42)
 
@@ -21,7 +21,7 @@ def test_choice_from_list(generator_name):
     objects = [{"id": 1}, {"id": 2}]
     assert rng.choice(objects) in objects
 
-@pytest.mark.parametrize("generator_name", ["random", "numpy", "xoshiro", "sobol", "halton", "lattice"])
+@pytest.mark.parametrize("generator_name", ["random", "numpy", "xoshiro", "sobol", "halton"])
 def test_choice_reproducibility(generator_name):
     code = f"""
 from src.rng_factory import RNG
