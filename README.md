@@ -15,3 +15,32 @@ This project investigates the impact of different random number generators (RNGs
     * `evolutionary_alg.py` - implements the core evolutionary algorithm, including selection, crossover, and mutation.
     * `rng_factory.py` - provides a unified wrapper for multiple random number generators (pseudo and quasi-random).
     * `stats_analyzis.py` - performs statistical analysis and visualizes performance differences between RNGs.
+3. `tests` folder - tests of custom functions from `RNG` wrapper.
+4. `.github/workflows` - CI/CD definition.
+
+## How to Use
+
+This project supports two modes of execution:
+
+### 1. Standard Mode (fresh experiment)
+
+Runs the evolutionary algorithm with newly generated random seeds.  
+All seeds will be saved to a file (`src/previous_seeds.txt`) for reproducibility.
+From `/src`  run:
+
+```bash
+python3 main.py
+```
+
+### 2. Replay Mode (repeat previous experiment)
+Runs the exact same experiment as before, using a previously saved list of seeds.
+From `/src`  run:
+
+```bash
+python main.py --replay previous_seeds.txt
+```
+
+This guarantees:
+- identical population initialization,
+- fully reproducible convergence,
+- identical random decisions during evolutionary runs.

@@ -6,9 +6,12 @@ import seaborn as sns
 import os
 
 # Wczytanie danych
-df = pd.read_csv("results_data/main_results.csv")
+df = pd.read_csv("../results_data/main_results.csv")
 df["score"] = df["score"].astype(float)
 df["run_time"] = df["run_time"].astype(float)
+
+df_conv = pd.read_csv("../results_data/convergence.csv")
+df_conv["score"] = df_conv["score"].astype(float)
 
 GENERATOR_ORDER = ["random", "numpy", "xoshiro", "sobol", "halton"]
 
@@ -18,8 +21,8 @@ for fes_type in df["fes_type"].unique():
         sub = df[(df["fes_type"] == fes_type) & (df["function"] == func)]
 
         # Foldery
-        func_dir = f"results_data/{fes_type}/{func}"
-        plot_dir = f"plots/{fes_type}/{func}"
+        func_dir = f"../results_data/{fes_type}/{func}"
+        plot_dir = f"../plots/{fes_type}/{func}"
         os.makedirs(func_dir, exist_ok=True)
         os.makedirs(plot_dir, exist_ok=True)
 
@@ -28,7 +31,7 @@ for fes_type in df["fes_type"].unique():
             sub.groupby("generator")["score"]
             .agg(["mean", "std", "min", "max"])
             .reindex(GENERATOR_ORDER)
-            .applymap(lambda x: f"{x:.3e}")
+            .round(3)
         )
         desc_stats.to_csv(os.path.join(func_dir, "score_results.csv"))
 
@@ -37,7 +40,7 @@ for fes_type in df["fes_type"].unique():
             sub.groupby("generator")["run_time"]
             .agg(["mean", "std"])
             .reindex(GENERATOR_ORDER)
-            .applymap(lambda x: f"{x:.3f}")
+            .round(3)
         )
         time_stats.to_csv(os.path.join(func_dir, "runtime_results.csv"))
 
@@ -86,4 +89,22 @@ for fes_type in df["fes_type"].unique():
         plt.yscale("log")
         plt.tight_layout()
         plt.savefig(os.path.join(plot_dir, "time_vs_score.png"))
+        plt.close()
+
+        # Wykres konwergencji: średnie przebiegi
+        conv_sub = df_conv[(df_conv["fes_type"] == fes_type) & (df_conv["function"] == func)]
+
+        plt.figure(figsize=(10, 6))
+        sns.lineplot(
+            data=conv_sub,
+            x="iteration", y="score",
+            hue="generator", estimator="mean", errorbar=None, palette="tab10"
+        )
+        plt.title(f"Konwergencja – {func} ({fes_type})")
+        plt.xlabel("Iteracja")
+        plt.ylabel("Najlepszy wynik (średnia ± std)")
+        plt.yscale("log")
+        plt.grid(True, which="both", linestyle="--", linewidth=0.5)
+        plt.tight_layout()
+        plt.savefig(os.path.join(plot_dir, "convergence_curve.png"))
         plt.close()
