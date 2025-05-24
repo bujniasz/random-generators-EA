@@ -27,6 +27,8 @@ def evolutionary_classic(q, p0, u, delta_small, delta_big, p_big_jump, pc, t_max
     o = grade(q, p0)
     best_grade, best_x = find_best(o)
 
+    history = [best_grade]
+
     while t <= t_max:
         r = reproduce(o, u, rng)
         c = crossover(r, pc, rng)
@@ -37,11 +39,12 @@ def evolutionary_classic(q, p0, u, delta_small, delta_big, p_big_jump, pc, t_max
         if curr_best_grade < best_grade:
             best_grade = curr_best_grade
             best_x = curr_best_x
-
-        o = om  # Generation succession
+        
+        history.append(best_grade)
+        o = om  
         t += 1
 
-    return best_grade, best_x
+    return best_grade, history
 
 
 def grade(q, population):
