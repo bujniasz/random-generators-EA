@@ -1,5 +1,5 @@
 import numpy as np
-from cec2017.functions import f2, f3, f4, f6, f8, f10, f11, f12, f13, f14, f15, f19
+from cec2017.functions import f2, f5, f8, f11, f14, f17, f20, f23, f26, f29
 from evolutionary_alg import evolutionary_classic
 from rng_factory import RNG
 import time
@@ -29,30 +29,30 @@ if __name__ == "__main__":
     PC = 0.5
     DELTA_S = 0.1
     DELTA_B = 10
-    P_BIG_JUMP = 0.2
+    P_BIG_JUMP = 0.03
 
     FES_SETTINGS = {
-        "short_budget": 500
-        #"long_budget": 20000
+        "short_budget": 950,
+        "long_budget": 49950
     }
 
     FUNCTIONS = {
         "f2": f2,
-        # "f3": f3,
-        # "f4": f4,
-        # "f6": f6,
-        # "f8": f8,
-        # "f11": f11,
-        # "f12": f12,
-        # "f13": f13,
-        # "f14": f14,
-        "f19": f19
+        "f5": f5,
+        "f8": f8,
+        "f11": f11,
+        "f14": f14,
+        "f17": f17,
+        "f20": f20,
+        "f23": f23,
+        "f26": f26,
+        "f29": f29
     }
 
     GENERATORS = [
         "random",   # Mersenne Twister
         "numpy",    # PCG
-        "xoshiro",  # xoshi#ro256
+        "xoshiro",  # xoshiro256
         "sobol",    # Sobol
         "halton"    # Halton
     ]
@@ -118,11 +118,11 @@ if __name__ == "__main__":
 
     df = pd.DataFrame(results)
     df.to_csv("../results_data/main_results.csv", index=False)
-    print("\n[OK] Zapisano wyniki do results_data/main_results.csv")
+    print("\n[OK] Zapisano wyniki końcowe do results_data/main_results.csv")
 
     df_conv = pd.DataFrame(convergence_data)
     df_conv.to_csv("../results_data/convergence.csv", index=False)
-    print("\n[OK] Zapisano przebieg konwergencji do results_data/convergence.csv")
+    print("\n[OK] Zapisano wyniki historyczne do results_data/convergence.csv")
 
     if not args.replay:
         with open("previous_seeds.txt", "w") as f:
