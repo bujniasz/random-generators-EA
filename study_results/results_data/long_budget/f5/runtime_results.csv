@@ -1,0 +1,6 @@
+generator,mean,std
+random,4.467,0.244
+numpy,4.58,0.153
+xoshiro,4.749,0.21
+sobol,6.579,0.203
+halton,10.767,0.13
