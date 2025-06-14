@@ -2,7 +2,6 @@ from scipy.stats import qmc
 import numpy as np
 import random
 from randomgen import Xoshiro256
-from qmcpy import Lattice
 
 class RNG:
     def __init__(self, name, dim, seed):
@@ -88,48 +87,3 @@ class RNG:
         else:
             val = self._next_qrng_value()
             return start + int(val * (stop - start))
-
-
-
-
-
-
-
-
-
-
-
-
-# TESTING - TO BE DELETED !!!        
-#rng = RNG("random", 10, seed=42)      #Mersenne Twister
-#rng = RNG("numpy", 10, seed=42)      #PCG
-#rng = RNG("xoshiro", 10, seed=42)    #xoshiro256
-#rng = RNG("sobol", 10, seed=42)      #Sobol   
-rng = RNG("halton", 10, seed=42)     #Halton
-#rng = RNG("lattice", 10, seed=42)    #Lattice
-
-# RANDRANGE
-#print(random.randrange(10, 1))
-# print(rng.randrange(1, 10))
-
-# RAND
-# print(random.random())
-# print(rng.rand())
-
-# UNIFORM
-# print(random.uniform(-5, 5))
-# print(rng.uniform(-5, 5, 2))
-# print(rng.uniform(-5, 5, 2))
-# rng1 = RNG("numpy", dim=5, seed=42)
-# rng2 = RNG("numpy", dim=5, seed=42)
-# for i in range(2):
-#     x = rng1.uniform(-5, 5, 1)
-#     print(x)
-
-# CHOICE
-# print(random.choice([1.435, 4.5656, 24.54656, -84443, 0.6454, -55.667, 2.355, 8.9877]))
-# print(rng.choice([1.435, 4.5656, 24.54656, -84443, 0.6454, -55.667, 2.355, 8.9877]))
-# print(rng.choice([1.435, 4.5656, 24.54656, -84443, 0.6454, -55.667, 2.355, 8.9877]))
-
-# for i in range(1000):
-#     print(rng.randrange(1, 10))

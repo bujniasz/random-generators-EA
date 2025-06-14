@@ -20,8 +20,9 @@ def evolutionary_classic(q, p0, u, delta_small, delta_big, p_big_jump, pc, t_max
         limit (int or float): Boundary limit for the solution.
 
     Returns:
-        tuple: Tuple containing the best score achieved and
-               the corresponding best solution.
+        tuple:
+            - float: Best score (objective function value) achieved during the evolution.
+            - list of float: History of best scores per generation.
     """
     t = 0
     o = grade(q, p0)
@@ -138,6 +139,17 @@ def mutate(population, delta_small, delta_big, p_big_jump, limit, rng):
 
 
 def crossover(population, pc, rng):
+    """
+    One-point crossover operator. Combines individuals from the population 
+    to produce new offspring based on crossover probability.
+
+    Parameters:
+        population (list): The current population of individuals (numpy arrays).
+        pc (float): Probability of performing crossover on an individual.
+
+    Returns:
+        list: The new population after crossover.
+    """
     crossed_population = []
 
     for x in population:
