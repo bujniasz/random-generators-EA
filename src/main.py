@@ -32,8 +32,8 @@ if __name__ == "__main__":
     P_BIG_JUMP = 0.03
 
     FES_SETTINGS = {
-        "short_budget": 950
-        # "long_budget": 49950
+        "short_budget": 950,
+        "long_budget": 49950
     }
 
     FUNCTIONS = {
