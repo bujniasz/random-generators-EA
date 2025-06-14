@@ -1,5 +1,5 @@
 import numpy as np
-from cec2017.functions import f2, f5, f8, f11, f14, f17, f20, f23, f26, f29
+from cec2017.functions import f2, f8, f11, f17, f23, f29
 from evolutionary_alg import evolutionary_classic
 from rng_factory import RNG
 import time
@@ -38,14 +38,10 @@ if __name__ == "__main__":
 
     FUNCTIONS = {
         "f2": f2,
-        "f5": f5,
         "f8": f8,
         "f11": f11,
-        "f14": f14,
         "f17": f17,
-        "f20": f20,
         "f23": f23,
-        "f26": f26,
         "f29": f29
     }
 

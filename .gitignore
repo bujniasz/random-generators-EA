@@ -4,5 +4,6 @@ plots/
 results_data/
 old_res/
 src/previous_seeds.txt
+src/previous_seeds_short_budget_only.txt
 !study_results/plots/
 !study_results/results_data/
