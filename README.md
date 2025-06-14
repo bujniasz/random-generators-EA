@@ -38,7 +38,7 @@ Runs the exact same experiment as before, using a previously saved list of seeds
 From `/src`  run:
 
 ```bash
-python main.py --replay <SEED_FILENAME>.txt
+python3 main.py --replay <SEED_FILENAME>.txt
 ```
 
 This guarantees:
